@@ -27,7 +27,7 @@ const AboutContainer = styled.div`
 const AboutImage = styled(motion.div)`
   width: 100%;
   height: clamp(300px, 40vw, 400px);
-  background-image: url('/images/profile.jpg');
+  background-image: url('/images/profile/profile.jpg');
   background-size: cover;
   background-position: center;
   border-radius: ${props => props.theme.borderRadius.large};
