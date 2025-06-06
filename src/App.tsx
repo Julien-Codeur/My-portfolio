@@ -9,7 +9,6 @@ import ContactForm from './components/ContactForm';
 import Loading from './components/Loading';
 import styled from '@emotion/styled';
 import { ThemeProvider } from './styles/ThemeProvider';
-import { Analytics } from "@vercel/analytics/next"
 
 const AppContainer = styled.div`
   font-family: 'Inter', sans-serif;
@@ -40,7 +39,6 @@ function App() {
             <Blog />
             <ContactForm />
             <Footer />
-            <Analytics />
           </>
         )}
       </AppContainer>
