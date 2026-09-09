@@ -1,226 +1,138 @@
-import React from 'react';
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
+import { site, navLinks } from '../data/site';
 
 const FooterSection = styled.footer`
-  background: linear-gradient(
-    135deg,
-    ${props => props.theme.colors.background.darker} 0%,
-    ${props => props.theme.colors.background.dark} 100%
-  );
-  padding: 4rem 0 2rem;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      ${props => props.theme.colors.primary.main}50,
-      transparent
-    );
-  }
+  background-color: ${props => props.theme.colors.secondary.dark};
+  color: #e8eef2;
+  padding: clamp(3rem, 6vw, 4rem) clamp(1.25rem, 5vw, 4rem) 2rem;
 `;
 
 const Container = styled.div`
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 1rem;
 `;
 
 const FooterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-bottom: 3rem;
-
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    gap: 2rem;
-  }
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
 `;
 
 const FooterColumn = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.85rem;
 `;
 
 const FooterTitle = styled.h3`
-  color: ${props => props.theme.colors.primary.main};
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  position: relative;
-  display: inline-block;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(
-      90deg,
-      ${props => props.theme.colors.primary.main},
-      ${props => props.theme.colors.secondary.main}
-    );
-  }
+  font-family: ${props => props.theme.fonts.display};
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
 `;
 
 const FooterText = styled.p`
-  color: ${props => props.theme.colors.text.secondary};
+  color: rgba(232, 238, 242, 0.75);
   line-height: 1.6;
   font-size: 0.95rem;
 `;
 
 const SocialLinks = styled.div`
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
 `;
 
-const SocialLink = styled(motion.a)`
-  color: ${props => props.theme.colors.text.secondary};
-  font-size: 1.25rem;
-  transition: all 0.3s ease;
-  display: flex;
+const SocialLink = styled.a`
+  color: rgba(232, 238, 242, 0.8);
+  font-size: 1.15rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: ${props => props.theme.colors.background.light};
-  border: 1px solid ${props => props.theme.colors.background.light};
+  border: 1px solid rgba(232, 238, 242, 0.25);
+  border-radius: ${props => props.theme.borderRadius.medium};
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 
   &:hover {
-    color: ${props => props.theme.colors.primary.main};
-    background: transparent;
-    border-color: ${props => props.theme.colors.primary.main};
+    color: #fff;
+    border-color: ${props => props.theme.colors.primary.light};
   }
 `;
 
 const FooterLinks = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.55rem;
 `;
 
-const FooterLink = styled(motion.a)`
-  color: ${props => props.theme.colors.text.secondary};
-  text-decoration: none;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
+const FooterLink = styled.a`
+  color: rgba(232, 238, 242, 0.75);
+  font-size: 0.95rem;
 
   &:hover {
-    color: ${props => props.theme.colors.primary.main};
-    transform: translateX(5px);
+    color: #fff;
   }
-
-  i {
-    font-size: 0.875rem;
-    color: ${props => props.theme.colors.primary.main};
-  }
-`;
-
-const ContactInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
 `;
 
 const ContactItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: ${props => props.theme.colors.text.secondary};
-  padding: 0.5rem 0;
+  color: rgba(232, 238, 242, 0.75);
+  font-size: 0.95rem;
+  line-height: 1.5;
 
-  i {
-    color: ${props => props.theme.colors.primary.main};
-    font-size: 1rem;
-    width: 20px;
-    text-align: center;
+  a {
+    color: inherit;
+
+    &:hover {
+      color: #fff;
+    }
   }
 `;
 
 const BottomBar = styled.div`
-  text-align: center;
-  padding-top: 2rem;
-  border-top: 1px solid ${props => props.theme.colors.background.light};
-  color: ${props => props.theme.colors.text.secondary};
-  font-size: 0.875rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(232, 238, 242, 0.15);
+  color: rgba(232, 238, 242, 0.55);
+  font-size: 0.85rem;
 `;
 
-const Copyright = styled.p`
-  margin: 0;
-`;
-
-const Footer: React.FC = () => {
+const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  const socialLinks = [
-    { icon: 'fab fa-github', url: 'https://github.com/Julien-Codeur', label: 'GitHub' },
-    { icon: 'fab fa-linkedin', url: 'https://www.linkedin.com/in/julien-eymard-6b5b192b2?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn' },
-    { icon: 'fab fa-twitter', url: 'https://x.com/juli68803?t=7hix05lIMx7H-BaryA705g&s=09', label: 'Twitter' },
-    { icon: 'fab fa-instagram', url: 'https://www.instagram.com/juliencodeur?igsh=YzljYTk1ODg3Zg==', label: 'Instagram' }
-  ];
-
-  const quickLinks = [
-    { icon: 'fas fa-chevron-right', text: 'À propos', href: '#about' },
-    { icon: 'fas fa-chevron-right', text: 'Projets', href: '#works' },
-    { icon: 'fas fa-chevron-right', text: 'Blog', href: '#blog' },
-    { icon: 'fas fa-chevron-right', text: 'Contact', href: '#contact' }
-  ];
 
   return (
     <FooterSection>
       <Container>
         <FooterGrid>
           <FooterColumn>
-            <FooterTitle>À propos</FooterTitle>
+            <FooterTitle>{site.brand}</FooterTitle>
             <FooterText>
-            Développeur web et mobile passionné par la création d'expériences numériques exceptionnelles.
+              {site.role} basé à {site.location}.
             </FooterText>
             <SocialLinks>
-              {socialLinks.map((link, index) => (
+              {site.socials.map(link => (
                 <SocialLink
-                  key={index}
+                  key={link.label}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
                 >
-                  <i className={link.icon}></i>
+                  <i className={link.icon} aria-hidden="true"></i>
                 </SocialLink>
               ))}
             </SocialLinks>
           </FooterColumn>
 
           <FooterColumn>
-            <FooterTitle>Liens rapides</FooterTitle>
+            <FooterTitle>Navigation</FooterTitle>
             <FooterLinks>
-              {quickLinks.map((link, index) => (
-                <FooterLink
-                  key={index}
-                  href={link.href}
-                  whileHover={{ x: 5 }}
-                >
-                  <i className={link.icon}></i>
+              {navLinks.map(link => (
+                <FooterLink key={link.href} href={link.href}>
                   {link.text}
                 </FooterLink>
               ))}
@@ -229,27 +141,20 @@ const Footer: React.FC = () => {
 
           <FooterColumn>
             <FooterTitle>Contact</FooterTitle>
-            <ContactInfo>
-              <ContactItem>
-                <i className="fas fa-envelope"></i>
-                <span>eymardjulien58@gmail.com</span>
-              </ContactItem>
-              <ContactItem>
-                <i className="fas fa-phone"></i>
-                <span>+228 98 79 58 85</span>
-              </ContactItem>
-              <ContactItem>
-                <i className="fas fa-map-marker-alt"></i>
-                <span>Lomé, Togo</span>
-              </ContactItem>
-            </ContactInfo>
+            <ContactItem>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </ContactItem>
+            <ContactItem>
+              <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
+            </ContactItem>
+            <ContactItem>{site.location}</ContactItem>
           </FooterColumn>
         </FooterGrid>
 
         <BottomBar>
-          <Copyright>
-            © {currentYear} Julien Codeur. Tous droits réservés.
-          </Copyright>
+          <p>
+            © {currentYear} {site.brand}. Tous droits réservés.
+          </p>
         </BottomBar>
       </Container>
     </FooterSection>

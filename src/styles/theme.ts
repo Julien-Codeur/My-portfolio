@@ -25,6 +25,12 @@ declare module '@emotion/react' {
       success: string;
       error: string;
       warning: string;
+      border: string;
+      surface: string;
+    };
+    fonts: {
+      display: string;
+      body: string;
     };
     breakpoints: {
       mobile: string;
@@ -45,30 +51,37 @@ declare module '@emotion/react' {
   }
 }
 
+/** Ink & Lagoon — light editorial, no purple / neon / glow. */
 export const theme = {
   colors: {
     primary: {
-      main: '#007bff',
-      light: '#3391ff',
-      dark: '#0056b3',
+      main: '#0B6E6A',
+      light: '#148F89',
+      dark: '#085552',
     },
     secondary: {
-      main: '#00ff88',
-      light: '#33ff9f',
-      dark: '#00cc6d',
+      main: '#243447',
+      light: '#3A4D63',
+      dark: '#161F2B',
     },
     background: {
-      dark: '#121212',
-      darker: '#1e1e1e',
-      light: '#2d2d2d',
+      darker: '#E8EEF2',
+      dark: '#F4F7F9',
+      light: '#D7DEE5',
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#b3b3b3',
+      primary: '#101418',
+      secondary: '#5A6570',
     },
-    success: '#28a745',
-    error: '#dc3545',
-    warning: '#ffc107',
+    success: '#1F7A4C',
+    error: '#B42318',
+    warning: '#B54708',
+    border: '#C9D2DB',
+    surface: '#FFFFFF',
+  },
+  fonts: {
+    display: "'Syne', sans-serif",
+    body: "'IBM Plex Sans', sans-serif",
   },
   breakpoints: {
     mobile: '576px',
@@ -77,15 +90,15 @@ export const theme = {
     large: '1200px',
   },
   shadows: {
-    small: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    medium: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    large: '0 8px 16px rgba(0, 0, 0, 0.1)',
+    small: 'none',
+    medium: 'none',
+    large: 'none',
   },
   borderRadius: {
     small: '4px',
-    medium: '8px',
-    large: '16px',
+    medium: '6px',
+    large: '10px',
   },
 };
 
-export type Theme = typeof theme; 
+export type Theme = typeof theme;

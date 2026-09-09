@@ -1,202 +1,160 @@
-import React, { useState } from 'react';
+import { FormEvent, ChangeEvent, useState } from 'react';
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import { site } from '../data/site';
 
 const ContactSection = styled.section`
-  padding: clamp(3rem, 5vw, 5rem) 0;
-  background: linear-gradient(
-    135deg,
-    ${props => props.theme.colors.background.dark} 0%,
-    ${props => props.theme.colors.background.darker} 100%
-  );
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(
-      circle at top right,
-      ${props => props.theme.colors.primary.main}20 0%,
-      transparent 70%
-    );
-  }
+  padding: clamp(4rem, 8vw, 6rem) clamp(1.25rem, 5vw, 4rem);
+  background-color: ${props => props.theme.colors.surface};
 `;
 
 const Container = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem);
-  position: relative;
-  z-index: 1;
 `;
 
 const SectionTitle = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
+  font-family: ${props => props.theme.fonts.display};
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
   color: ${props => props.theme.colors.text.primary};
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  line-height: 1.2;
-  position: relative;
+`;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(
-      90deg,
-      ${props => props.theme.colors.primary.main},
-      ${props => props.theme.colors.secondary.main}
-    );
-    border-radius: 3px;
-  }
+const SectionLead = styled.p`
+  color: ${props => props.theme.colors.text.secondary};
+  margin-bottom: clamp(2rem, 4vw, 2.75rem);
+  max-width: 34rem;
 `;
 
 const ContactGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: clamp(2rem, 4vw, 3rem);
   align-items: start;
+
+  @media (max-width: ${props => props.theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
 `;
 
-const ContactInfo = styled.div`
-  color: ${props => props.theme.colors.text.primary};
-`;
+const ContactInfo = styled.div``;
 
 const InfoTitle = styled.h3`
-  font-size: clamp(1.3rem, 2vw, 1.5rem);
-  margin-bottom: clamp(1rem, 2vw, 1.5rem);
-  color: ${props => props.theme.colors.primary.main};
-  line-height: 1.3;
+  font-family: ${props => props.theme.fonts.display};
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: ${props => props.theme.colors.text.primary};
 `;
 
 const InfoText = styled.p`
   color: ${props => props.theme.colors.text.secondary};
-  line-height: 1.6;
-  margin-bottom: clamp(1.5rem, 3vw, 2rem);
-  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
 `;
 
-const ContactDetails = styled.div`
+const ContactDetails = styled.ul`
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 2vw, 1.5rem);
+  gap: 0.85rem;
 `;
 
-const ContactItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: clamp(0.8rem, 1.5vw, 1rem);
+const ContactItem = styled.li`
   color: ${props => props.theme.colors.text.secondary};
-  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  font-size: 0.98rem;
 
-  i {
-    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+  a {
     color: ${props => props.theme.colors.primary.main};
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span.label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: ${props => props.theme.colors.text.secondary};
+    margin-bottom: 0.15rem;
   }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 2vw, 1.5rem);
-  background: ${props => props.theme.colors.background.darker};
-  padding: clamp(1.5rem, 3vw, 2rem);
-  border-radius: 15px;
-  box-shadow: ${props => props.theme.shadows.large};
-  border: 1px solid ${props => props.theme.colors.background.light};
+  gap: 1.1rem;
+  background: ${props => props.theme.colors.background.dark};
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.large};
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
 
 const Label = styled.label`
   color: ${props => props.theme.colors.text.primary};
-  font-weight: 500;
-  font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+  font-weight: 600;
+  font-size: 0.88rem;
 `;
 
 const Input = styled.input`
-  padding: clamp(0.8rem, 1.5vw, 1rem);
-  border: 2px solid ${props => props.theme.colors.background.light};
-  border-radius: 8px;
-  background-color: ${props => props.theme.colors.background.dark};
+  padding: 0.85rem 0.95rem;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.medium};
+  background-color: ${props => props.theme.colors.surface};
   color: ${props => props.theme.colors.text.primary};
-  transition: all 0.3s ease;
-  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  font-family: inherit;
+  font-size: 1rem;
 
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary.main};
-    box-shadow: 0 0 0 3px ${props => props.theme.colors.primary.main}20;
   }
 `;
 
 const TextArea = styled.textarea`
-  padding: clamp(0.8rem, 1.5vw, 1rem);
-  border: 2px solid ${props => props.theme.colors.background.light};
-  border-radius: 8px;
-  background-color: ${props => props.theme.colors.background.dark};
+  padding: 0.85rem 0.95rem;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.medium};
+  background-color: ${props => props.theme.colors.surface};
   color: ${props => props.theme.colors.text.primary};
-  min-height: clamp(120px, 20vw, 150px);
+  min-height: 140px;
   resize: vertical;
-  transition: all 0.3s ease;
-  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  font-family: inherit;
+  font-size: 1rem;
 
   &:focus {
     outline: none;
     border-color: ${props => props.theme.colors.primary.main};
-    box-shadow: 0 0 0 3px ${props => props.theme.colors.primary.main}20;
   }
 `;
 
-const SubmitButton = styled(motion.button)`
-  padding: clamp(0.8rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2rem);
-  background: linear-gradient(
-    45deg,
-    ${props => props.theme.colors.primary.main},
-    ${props => props.theme.colors.secondary.main}
-  );
-  color: white;
+const SubmitButton = styled.button`
+  padding: 0.9rem 1.4rem;
+  background: ${props => props.theme.colors.primary.main};
+  color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: ${props => props.theme.borderRadius.medium};
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: background 0.2s ease;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transition: 0.5s;
-  }
-
-  &:hover::before {
-    left: 100%;
+  &:hover:not(:disabled) {
+    background: ${props => props.theme.colors.primary.dark};
   }
 
   &:disabled {
@@ -205,19 +163,18 @@ const SubmitButton = styled(motion.button)`
   }
 `;
 
-const Message = styled(motion.div)<{ type: 'success' | 'error' }>`
-  padding: 1rem;
-  border-radius: 8px;
+const Message = styled.div<{ $type: 'success' | 'error' }>`
+  padding: 0.85rem 1rem;
+  border-radius: ${props => props.theme.borderRadius.medium};
   text-align: center;
-  margin-top: 1rem;
   background-color: ${props =>
-    props.type === 'success'
-      ? props.theme.colors.success
-      : props.theme.colors.error};
-  color: white;
+    props.$type === 'success' ? props.theme.colors.success : props.theme.colors.error};
+  color: #fff;
+  font-size: 0.95rem;
 `;
 
-const ContactForm: React.FC = () => {
+const ContactForm = () => {
+  const reduceMotion = useReducedMotion();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -227,38 +184,48 @@ const ContactForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      setError('Configuration du formulaire incomplete. Vérifiez les variables EmailJS.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       await emailjs.send(
-        'service_5xvi81z',
-        'template_aop5qab',
+        serviceId,
+        templateId,
         {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
-          to_name: 'Julien Codeur',
-          to_email: 'eymardjulien58@gmail.com',
+          to_name: site.brand,
+          to_email: site.email,
         },
-        'W9_jji-z07HhFFSV7'
+        publicKey
       );
 
       setIsSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
       setTimeout(() => setIsSubmitted(false), 3000);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer.';
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.";
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -269,35 +236,39 @@ const ContactForm: React.FC = () => {
     <ContactSection id="contact">
       <Container>
         <SectionTitle
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
           viewport={{ once: true }}
         >
-          Contactez-moi
+          Contact
         </SectionTitle>
+        <SectionLead>
+          Un projet, une opportunité ou une question — écrivez-moi.
+        </SectionLead>
         <ContactGrid>
           <ContactInfo>
-            <InfoTitle>Parlons de votre projet</InfoTitle>
+            <InfoTitle>Coordonnées</InfoTitle>
             <InfoText>
-              Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration.
+              Ouvert aux collaborations, stages et missions freelance autour du web et du
+              mobile.
             </InfoText>
             <ContactDetails>
               <ContactItem>
-                <i className="fas fa-envelope"></i>
-                <span>eymardjulien58@gmail.com</span>
+                <span className="label">Email</span>
+                <a href={`mailto:${site.email}`}>{site.email}</a>
               </ContactItem>
               <ContactItem>
-                <i className="fas fa-phone"></i>
-                <span>+228 91 23 45 67</span>
+                <span className="label">Téléphone</span>
+                <a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>
               </ContactItem>
               <ContactItem>
-                <i className="fas fa-map-marker-alt"></i>
-                <span>Lomé, Togo</span>
+                <span className="label">Localisation</span>
+                {site.location}
               </ContactItem>
             </ContactDetails>
           </ContactInfo>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate={false}>
             <FormGroup>
               <Label htmlFor="name">Nom</Label>
               <Input
@@ -307,6 +278,7 @@ const ContactForm: React.FC = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                autoComplete="name"
                 placeholder="Votre nom"
               />
             </FormGroup>
@@ -319,6 +291,7 @@ const ContactForm: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                autoComplete="email"
                 placeholder="votre@email.com"
               />
             </FormGroup>
@@ -330,35 +303,20 @@ const ContactForm: React.FC = () => {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                placeholder="Votre message..."
+                placeholder="Votre message…"
               />
             </FormGroup>
-            <SubmitButton
-              type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Envoi en cours...' : 'Envoyer le message'}
+            <SubmitButton type="submit" disabled={isLoading}>
+              {isLoading ? 'Envoi en cours…' : 'Envoyer le message'}
             </SubmitButton>
             {error && (
-              <Message
-                type="error"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-              >
+              <Message $type="error" role="alert">
                 {error}
               </Message>
             )}
             {isSubmitted && (
-              <Message
-                type="success"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-              >
-                Message envoyé avec succès !
+              <Message $type="success" role="status">
+                Message envoyé avec succès.
               </Message>
             )}
           </Form>
@@ -368,4 +326,4 @@ const ContactForm: React.FC = () => {
   );
 };
 
-export default ContactForm; 
+export default ContactForm;

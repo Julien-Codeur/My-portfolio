@@ -1,54 +1,72 @@
-# React + TypeScript + Vite
+# Portfolio — Julien Pito
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portfolio personnel de **PITO TILARI Essoron Julien** (`Julien Codeur`) : développeur web & mobile basé à Lomé, Togo.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 18 + TypeScript
+- Vite + Vitest
+- Emotion (thème **Ink & Lagoon**)
+- Framer Motion
+- EmailJS (formulaire de contact)
+- Typographie : Syne + IBM Plex Sans
 
-## Expanding the ESLint configuration
+## Identité visuelle
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Direction claire et éditoriale (fond pierre, encre, accent lagon) — volontairement hors des looks « portfolio dark / glow / purple ».
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Démarrage
+
+```bash
+cp .env.example .env   # renseigner EmailJS
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Variables d'environnement
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Variable                   | Description          |
+| -------------------------- | -------------------- |
+| `VITE_EMAILJS_SERVICE_ID`  | Service EmailJS      |
+| `VITE_EMAILJS_TEMPLATE_ID` | Template EmailJS     |
+| `VITE_EMAILJS_PUBLIC_KEY`  | Clé publique EmailJS |
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## Contenu éditable
+
+Les textes et projets sont centralisés dans `src/data/` :
+
+| Fichier       | Contenu                                     |
+| ------------- | ------------------------------------------- |
+| `site.ts`     | Identité, contact, réseaux, navigation      |
+| `projects.ts` | Projets (résumé, problème, approche, liens) |
+| `skills.ts`   | Compétences par catégorie                   |
+
+Pour lier un dépôt ou une démo précise, renseigne `githubUrl` / `liveUrl` dans `projects.ts`.
+
+## Structure
+
 ```
+src/
+  components/   # UI
+  data/         # Contenu
+  styles/       # Thème Emotion
+  test/         # Helpers de test
+public/images/  # Médias (JPEG + WebP)
+```
+
+## Scripts
+
+| Commande               | Description               |
+| ---------------------- | ------------------------- |
+| `npm run dev`          | Serveur de développement  |
+| `npm run build`        | Typecheck + build Vite    |
+| `npm run test`         | Tests Vitest              |
+| `npm run lint`         | ESLint                    |
+| `npm run format`       | Prettier (écriture)       |
+| `npm run format:check` | Prettier (CI)             |
+| `npm run images:webp`  | Génère les variantes WebP |
+| `npm run preview`      | Prévisualisation du build |
+
+## Qualité
+
+CI GitHub Actions (`.github/workflows/ci.yml`) : lint, format, tests, build.

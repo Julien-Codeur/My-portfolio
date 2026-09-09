@@ -1,21 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { splitVendorChunkPlugin } from 'vite'
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
       jsxImportSource: '@emotion/react',
       babel: {
-        plugins: ['@emotion/babel-plugin']
-      }
+        plugins: ['@emotion/babel-plugin'],
+      },
     }),
-    splitVendorChunkPlugin()
   ],
   server: {
     port: 5173,
-    open: true
+    open: true,
   },
   build: {
     chunkSizeWarningLimit: 1000,
@@ -24,12 +21,18 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
           'framer-motion': ['framer-motion'],
-          'emotion': ['@emotion/react', '@emotion/styled']
-        }
-      }
-    }
+          emotion: ['@emotion/react', '@emotion/styled'],
+        },
+      },
+    },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'framer-motion', '@emotion/react', '@emotion/styled']
-  }
-})
+    include: ['react', 'react-dom', 'framer-motion', '@emotion/react', '@emotion/styled'],
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    css: true,
+  },
+});
